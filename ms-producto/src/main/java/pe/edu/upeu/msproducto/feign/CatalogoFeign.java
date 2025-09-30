@@ -2,6 +2,7 @@ package pe.edu.upeu.msproducto.feign;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,12 +24,13 @@ public interface CatalogoFeign {
     }
     @DeleteMapping("/{id}")
     @CircuitBreaker(name = "categoriaEliminarPorIdCB", fallbackMethod = "fallbackEliminarCategoria")
-    public void eliminar(@PathVariable Integer id);
+    ResponseEntity<String> eliminar(@PathVariable("id") Integer id);
 
-    default void fallbackEliminarCategoria(Integer id, Exception e) {
-        System.out.println("No se pudo eliminar la categoría con id " + id + ". Servicio temporalmente no disponible.");
-        // aquí podrías registrar en logs o manejar la lógica alternativa
+    default ResponseEntity<String> fallbackEliminarCategoria(Integer id, Exception e) {
+        String msg = "No se pudo eliminar la categoría con id " + id + ". Servicio temporalmente no disponible.";
+        return ResponseEntity.status(503).body(msg);
     }
+
 
 
 
