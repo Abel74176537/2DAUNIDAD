@@ -38,3 +38,13 @@ resilience4j.circuitbreaker:
       waitDurationInOpenState: 5s
       failureRateThreshold: 50
       eventConsumerBufferSize: 10
+
+    categoriaEliminarPorIdCB:
+      registerHealthIndicator: true
+      slidingWindowType: COUNT_BASED
+      slidingWindowSize: 5
+      minimumNumberOfCalls: 3
+      permittedNumberOfCallsInHalfOpenState: 1
+      waitDurationInOpenState: 10s
+      failureRateThreshold: 30
+      eventConsumerBufferSize: 10
