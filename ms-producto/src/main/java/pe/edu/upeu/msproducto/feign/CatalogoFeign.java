@@ -3,9 +3,7 @@ package pe.edu.upeu.msproducto.feign;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 import pe.edu.upeu.msproducto.dto.CatagoriaDto;
 
 import java.util.Optional;
@@ -22,13 +20,18 @@ public interface CatalogoFeign {
         categoriaDto.setNombre("Servicio Invalido");
         return categoriaDto;
     }
-    @DeleteMapping("/{id}")
-    @CircuitBreaker(name = "categoriaEliminarPorIdCB", fallbackMethod = "fallbackEliminarCategoria")
-    ResponseEntity<String> eliminar(@PathVariable("id") Integer id);
 
-    default ResponseEntity<String> fallbackEliminarCategoria(Integer id, Exception e) {
-        String msg = "No se pudo eliminar la categoría con id " + id + ". Servicio temporalmente no disponible.";
-        return ResponseEntity.status(503).body(msg);
+
+    @PostMapping
+    @CircuitBreaker(name = "categoriaGuardarCB", fallbackMethod = "fallbackGuardarCategoria")
+    ResponseEntity<CatagoriaDto> guardar(@RequestBody CatagoriaDto categoria);
+
+    default ResponseEntity<CatagoriaDto> fallbackGuardarCategoria(CatagoriaDto categoria, Exception e) {
+        CatagoriaDto fallbackCat = new CatagoriaDto();
+        fallbackCat.setId(999999);
+        fallbackCat.setNombre("Servicio temporalmente no disponible");
+        fallbackCat.setDescripcion("No se pudo guardar la categoría");
+        return ResponseEntity.status(503).body(fallbackCat);
     }
 
 
