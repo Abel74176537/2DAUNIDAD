@@ -23,7 +23,7 @@ public interface CatalogoFeign {
     }
     @DeleteMapping("/{id}")
     @CircuitBreaker(name = "categoriaEliminarPorIdCB", fallbackMethod = "fallbackEliminarCategoria")
-    public void eliminarPorId(@PathVariable Integer id);
+    public void eliminar(@PathVariable Integer id);
 
     default void fallbackEliminarCategoria(Integer id, Exception e) {
         System.out.println("No se pudo eliminar la categoría con id " + id + ". Servicio temporalmente no disponible.");
