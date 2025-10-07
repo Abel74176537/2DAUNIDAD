@@ -2,11 +2,9 @@ package pe.edu.upeu.msproducto.feign;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import pe.edu.upeu.msproducto.dto.CatagoriaDto;
-
-import java.util.Optional;
 
 @FeignClient(name = "ms-catalogo", path = "/categoria")
 public interface CatalogoFeign {
@@ -14,28 +12,11 @@ public interface CatalogoFeign {
     @CircuitBreaker(name = "categoriaListarPorIdCB", fallbackMethod = "fallbackCategoria")
     public CatagoriaDto buscarPorId(@PathVariable Integer id);
 
-    default CatagoriaDto fallbackCategoria (Integer id, Exception e) {
-        CatagoriaDto categoriaDto = new CatagoriaDto();
-        categoriaDto.setId(9000000);
-        categoriaDto.setNombre("Servicio Invalido");
-        return categoriaDto;
+    default CatagoriaDto fallbackCategoria(Integer id, Exception e) {
+        CatagoriaDto catagoriaDto = new CatagoriaDto();
+        catagoriaDto.setId(9000000);
+        catagoriaDto.setNombre("Servicio Categoria no disponible");
+        return catagoriaDto;
     }
-
-
-    @PostMapping
-    @CircuitBreaker(name = "categoriaGuardarCB", fallbackMethod = "fallbackGuardarCategoria")
-    ResponseEntity<CatagoriaDto> guardar(@RequestBody CatagoriaDto categoria);
-
-    default ResponseEntity<CatagoriaDto> fallbackGuardarCategoria(CatagoriaDto categoria, Exception e) {
-        CatagoriaDto fallbackCat = new CatagoriaDto();
-        fallbackCat.setId(999999);
-        fallbackCat.setNombre("Servicio temporalmente no disponible");
-        fallbackCat.setDescripcion("No se pudo guardar la categoría");
-        return ResponseEntity.status(503).body(fallbackCat);
-    }
-
-
-
-
 
 }

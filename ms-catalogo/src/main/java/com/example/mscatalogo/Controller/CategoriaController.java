@@ -25,7 +25,7 @@ public class CategoriaController {
     }
 
     @PostMapping
-    public Categoria guardar(@RequestBody Categoria categoria) {
+    public Categoria guardar(Categoria categoria) {
         return categoriaService.guardar(categoria);
     }
 
