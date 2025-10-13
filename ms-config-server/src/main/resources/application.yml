@@ -9,7 +9,7 @@ spring:
         git:
           uri: https://github.com/Abel74176537/2DAUNIDAD.git # ruta del repositorio git
           searchPaths: config-data
-          default-label: circuitbreaker
+          default-label: Main
   security:
     user:
       name: root

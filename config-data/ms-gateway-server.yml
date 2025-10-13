@@ -27,10 +27,17 @@ spring:
               uri: lb://ms-catalogo
               predicates:
                 - Path=/categoria/**
+              filters:
+                - AuthFilter
+
             - id: ms-producto
               uri: lb://ms-producto
               predicates:
                 - Path=/producto/**
+            - id: ms-auth
+              uri: lb://ms-auth
+              predicates:
+                - Path=/auth/**
               # Si tu servicio real no expone /categoria/...:
               # filters:
               #   - StripPrefix=1
